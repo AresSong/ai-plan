@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>From Vibe Coding to AI Coding Operations</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --ink: #111827;
+      --muted: #4b5563;
+      --line: #cbd5e1;
+      --teal: #0f766e;
+      --blue: #2563eb;
+      --amber: #b45309;
+      --green: #15803d;
+      --rose: #be123c;
+      --violet: #6d28d9;
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 20px clamp(18px, 4vw, 48px) 16px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .title-block {
+      max-width: 940px;
+    }
+
+    .kicker {
+      margin: 0 0 6px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 2.1rem;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 820px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .timer {
+      min-width: 144px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      background: #f8fafc;
+      text-align: right;
+    }
+
+    .timer strong {
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .timer span {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 10px clamp(18px, 4vw, 48px);
+    }
+
+    .step-tabs {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+      gap: 8px;
+    }
+
+    .step-tab {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      border-radius: var(--radius);
+      padding: 9px 10px;
+      min-height: 52px;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    }
+
+    .step-tab:hover,
+    .step-tab:focus-visible {
+      border-color: var(--teal);
+      outline: none;
+    }
+
+    .step-tab.active {
+      background: #ecfdf5;
+      border-color: var(--teal);
+      color: #064e3b;
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      color: #ffffff;
+      background: var(--teal);
+      font-weight: 800;
+      font-size: 0.78rem;
+    }
+
+    .step-tab span:last-child {
+      font-size: 0.86rem;
+      font-weight: 760;
+      line-height: 1.15;
+    }
+
+    main {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px clamp(18px, 4vw, 48px) 42px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.83fr) minmax(560px, 1.17fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .story-panel {
+      padding: 24px;
+      min-height: 560px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+    }
+
+    .act-label {
+      color: var(--teal);
+      font-weight: 850;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .story-title {
+      font-size: 1.82rem;
+      line-height: 1.13;
+      margin-bottom: 12px;
+    }
+
+    .story-thesis {
+      color: var(--muted);
+      font-size: 1.02rem;
+      margin-bottom: 18px;
+    }
+
+    .talk-points {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .talk-points li {
+      border-left: 4px solid var(--teal);
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #1f2937;
+    }
+
+    .speaker-move {
+      border: 1px dashed #94a3b8;
+      border-radius: var(--radius);
+      padding: 14px;
+      color: #334155;
+      background: #f8fafc;
+    }
+
+    .speaker-move strong {
+      display: block;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .map-panel {
+      position: relative;
+      min-height: 560px;
+      overflow: hidden;
+      padding: 18px;
+    }
+
+    .map-canvas {
+      position: relative;
+      min-height: 526px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(#e5e7eb 1px, transparent 1px),
+        linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .map-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .map-lines line {
+      stroke: #94a3b8;
+      stroke-width: 2;
+    }
+
+    .map-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 250px;
+      min-height: 122px;
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      z-index: 3;
+    }
+
+    .map-center strong {
+      display: block;
+      font-size: 1.24rem;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .map-center span {
+      color: #cbd5e1;
+      font-size: 0.86rem;
+    }
+
+    .map-node {
+      position: absolute;
+      width: 188px;
+      min-height: 74px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      border-radius: var(--radius);
+      color: var(--ink);
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      padding: 11px 12px;
+      text-align: left;
+      cursor: pointer;
+      z-index: 4;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .map-node:hover,
+    .map-node:focus-visible {
+      transform: translateY(-2px);
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .map-node.active {
+      border-color: var(--teal);
+      background: #ecfdf5;
+    }
+
+    .map-node .node-title {
+      font-weight: 850;
+      font-size: 0.92rem;
+      line-height: 1.12;
+      overflow-wrap: anywhere;
+    }
+
+    .map-node .node-caption {
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+
+    .node-0 { left: 39%; top: 5%; }
+    .node-1 { right: 5%; top: 42%; }
+    .node-2 { left: 39%; bottom: 4%; }
+    .node-3 { left: 5%; top: 42%; }
+    .node-4 { left: 39%; bottom: 4%; }
+    .node-5 { left: 7%; bottom: 8%; }
+    .node-6 { left: 4%; top: 44%; }
+    .node-7 { left: 7%; top: 14%; }
+
+    .stack-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .translation {
+      padding: 18px;
+    }
+
+    .translation h2,
+    .loop-panel h2,
+    .matrix-panel h2 {
+      font-size: 1.08rem;
+      margin-bottom: 12px;
+    }
+
+    .unit {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #f8fafc;
+    }
+
+    .unit h3 {
+      font-size: 0.98rem;
+      margin-bottom: 10px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: #ffffff;
+      color: #1f2937;
+      font-size: 0.82rem;
+      font-weight: 720;
+    }
+
+    .unit.ml .chip {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+    }
+
+    .unit.ai .chip {
+      border-color: #99f6e4;
+      background: #f0fdfa;
+    }
+
+    .loop-panel,
+    .matrix-panel {
+      padding: 18px;
+    }
+
+    .loop-track {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .loop-track li {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 12px;
+      min-height: 118px;
+      position: relative;
+    }
+
+    .loop-track strong {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.92rem;
+    }
+
+    .loop-track span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .loop-track li::before {
+      content: attr(data-step);
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #ffffff;
+      font-weight: 850;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .mini-row {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 12px;
+      min-height: 120px;
+    }
+
+    .mini-row strong {
+      display: block;
+      color: #0f172a;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    .mini-row span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .accent-teal { border-top: 4px solid var(--teal); }
+    .accent-blue { border-top: 4px solid var(--blue); }
+    .accent-amber { border-top: 4px solid var(--amber); }
+    .accent-green { border-top: 4px solid var(--green); }
+    .accent-rose { border-top: 4px solid var(--rose); }
+    .accent-violet { border-top: 4px solid var(--violet); }
+
+    footer {
+      color: var(--muted);
+      font-size: 0.82rem;
+      padding: 2px 0 0;
+    }
+
+    @media (max-width: 1180px) {
+      .stage,
+      .stack-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .map-panel,
+      .story-panel {
+        min-height: auto;
+      }
+
+      .map-canvas {
+        min-height: 650px;
+      }
+
+      .node-0 { left: 39%; top: 4%; }
+      .node-1 { right: 4%; top: 42%; }
+      .node-2 { left: 39%; bottom: 3%; }
+      .node-3 { left: 4%; top: 42%; }
+      .node-4 { left: 39%; bottom: 3%; }
+      .node-5 { left: 4%; bottom: 8%; }
+      .node-6 { left: 3%; top: 43%; }
+      .node-7 { left: 4%; top: 15%; }
+
+      .loop-track {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .matrix-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      header {
+        padding-top: 16px;
+      }
+
+      .header-row {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 1.64rem;
+      }
+
+      .timer {
+        text-align: left;
+      }
+
+      .step-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .story-panel {
+        padding: 18px;
+      }
+
+      .story-title {
+        font-size: 1.34rem;
+      }
+
+      .map-canvas {
+        min-height: auto;
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        background: #f8fafc;
+      }
+
+      .map-lines {
+        display: none;
+      }
+
+      .map-center,
+      .map-node {
+        position: static;
+        transform: none;
+        width: 100%;
+      }
+
+      .map-center {
+        min-height: auto;
+      }
+
+      .loop-track,
+      .matrix-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      nav,
+      .timer {
+        display: none;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      .panel {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="header-row">
+        <div class="title-block">
+          <p class="kicker">Oral presentation visual</p>
+          <h1>From Vibe Coding to AI Coding Operations</h1>
+          <p class="subtitle">A narrative map for applying MLOps and LLMOps discipline to local IDE work with AI coding assistants.</p>
+        </div>
+        <div class="timer" aria-label="Suggested talk duration">
+          <strong>10-12 min</strong>
+          <span>story-led technical talk</span>
+        </div>
+      </div>
+    </header>
+
+    <nav aria-label="Presentation acts">
+      <div class="step-tabs" id="stepTabs"></div>
+    </nav>
+
+    <main>
+      <section class="stage" aria-label="Interactive presentation story map">
+        <article class="panel story-panel" aria-live="polite">
+          <div>
+            <div class="act-label" id="actLabel"></div>
+            <h2 class="story-title" id="storyTitle"></h2>
+            <p class="story-thesis" id="storyThesis"></p>
+            <ul class="talk-points" id="talkPoints"></ul>
+          </div>
+          <div class="speaker-move">
+            <strong>Speaker move</strong>
+            <span id="speakerMove"></span>
+          </div>
+        </article>
+
+        <article class="panel map-panel" aria-label="Interactive capability map">
+          <div class="map-canvas" id="mapCanvas">
+            <svg class="map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <line x1="50" y1="50" x2="50" y2="13"></line>
+              <line x1="50" y1="50" x2="86" y2="50"></line>
+              <line x1="50" y1="50" x2="50" y2="87"></line>
+              <line x1="50" y1="50" x2="14" y2="50"></line>
+            </svg>
+            <div class="map-center">
+              <div>
+                <strong>Trustworthy AI-Assisted Delivery</strong>
+                <span>Value -> system -> evidence -> safe improvement.</span>
+              </div>
+            </div>
+            <div id="mapNodes"></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel translation">
+        <h2>Deployment Unit Translation</h2>
+        <div class="stack-strip">
+          <div class="unit ml">
+            <h3>MLOps deployment unit</h3>
+            <div class="chips">
+              <span class="chip">model</span>
+              <span class="chip">data</span>
+              <span class="chip">features</span>
+              <span class="chip">serving environment</span>
+              <span class="chip">evaluation</span>
+              <span class="chip">monitoring</span>
+            </div>
+          </div>
+          <div class="unit ai">
+            <h3>AI coding deployment unit</h3>
+            <div class="chips">
+              <span class="chip">model</span>
+              <span class="chip">settings</span>
+              <span class="chip">repo SHA</span>
+              <span class="chip">instructions</span>
+              <span class="chip">prompts</span>
+              <span class="chip">skills</span>
+              <span class="chip">agents</span>
+              <span class="chip">MCP/tools</span>
+              <span class="chip">guardrails</span>
+              <span class="chip">environment</span>
+              <span class="chip">evaluation suite</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel matrix-panel">
+        <h2>Evidence Snapshot: Why Local Evaluation Matters</h2>
+        <div class="matrix-grid">
+          <div class="mini-row accent-green">
+            <strong>Clear upside exists</strong>
+            <span>GitHub reported Copilot users completed a simple programming task about 55% faster.</span>
+          </div>
+          <div class="mini-row accent-green">
+            <strong>Quality can improve</strong>
+            <span>A GitHub study of 202 valid submissions found Copilot users were 53.2% more likely to pass all unit tests.</span>
+          </div>
+          <div class="mini-row accent-rose">
+            <strong>But context can reverse gains</strong>
+            <span>METR reported 16 experienced developers were 19% slower on 246 realistic tasks in familiar projects.</span>
+          </div>
+          <div class="mini-row accent-amber">
+            <strong>Enterprise signals vary</strong>
+            <span>ZoomInfo reported 33% suggestion acceptance, 20% line acceptance, and 72% developer satisfaction.</span>
+          </div>
+          <div class="mini-row accent-blue">
+            <strong>DORA shows tradeoffs</strong>
+            <span>Higher AI adoption correlated with better docs, code quality, and reviews, but lower throughput and stability.</span>
+          </div>
+          <div class="mini-row accent-violet">
+            <strong>Security needs its own gate</strong>
+            <span>The exported research cites a Veracode report where about 45% of tested AI-generated code had security flaws.</span>
+          </div>
+          <div class="mini-row accent-teal">
+            <strong>Best first eval suite</strong>
+            <span>Start with 20 to 30 real tasks: recurring work, hard tasks, and failure or security cases.</span>
+          </div>
+          <div class="mini-row accent-blue">
+            <strong>Useful local tooling</strong>
+            <span>Use Promptfoo for fast matrix runs, Inspect for deep agent benchmarks, and Phoenix, Langfuse, or MLflow for traces.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel loop-panel">
+        <h2>Minimum Viable Operating Loop</h2>
+        <ol class="loop-track">
+          <li data-step="1">
+            <strong>Baseline</strong>
+            <span>Record the current model, instructions, tools, workflow, and normal task outcomes.</span>
+          </li>
+          <li data-step="2">
+            <strong>Benchmark</strong>
+            <span>Build 20 to 30 representative tasks from real bugs, features, reviews, and migrations.</span>
+          </li>
+          <li data-step="3">
+            <strong>Compare</strong>
+            <span>Run candidate stacks on the same tasks with tests, review checks, cost, and latency captured.</span>
+          </li>
+          <li data-step="4">
+            <strong>Promote</strong>
+            <span>Move a stack to default only after quality, safety, cost, and speed gates are met.</span>
+          </li>
+          <li data-step="5">
+            <strong>Monitor</strong>
+            <span>Track weekly success rate, rework, failures, review burden, incidents, and cost per useful task.</span>
+          </li>
+          <li data-step="6">
+            <strong>Learn or Roll Back</strong>
+            <span>Turn failures into evaluation cases, improve the stack, or restore the prior manifest.</span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="panel matrix-panel">
+        <h2>Detailed Capabilities for the Q&A</h2>
+        <div class="matrix-grid">
+          <div class="mini-row accent-teal">
+            <strong>1. Measurable value</strong>
+            <span>Outcome-led engineering plus human feedback and accountability.</span>
+          </div>
+          <div class="mini-row accent-blue">
+            <strong>2. Reproducible system</strong>
+            <span>Manage the whole system, not just the model, with reproducibility and lineage.</span>
+          </div>
+          <div class="mini-row accent-amber">
+            <strong>3. Evidence-based change</strong>
+            <span>Experimentation, evaluation, registry, promotion, rollback, and telemetry.</span>
+          </div>
+          <div class="mini-row accent-green">
+            <strong>4. Safe adaptation</strong>
+            <span>Drift response, continuous improvement, governance, security, and trust.</span>
+          </div>
+          <div class="mini-row accent-rose">
+            <strong>Stack manifest</strong>
+            <span>Model, settings, repo SHA, instructions, prompts, skills, tools, guardrails, environment, and eval suite.</span>
+          </div>
+          <div class="mini-row accent-violet">
+            <strong>Run registry</strong>
+            <span>Task ID, stack ID, tool calls, generated diff, tests, review outcome, human edits, duration, and cost.</span>
+          </div>
+          <div class="mini-row accent-teal">
+            <strong>Promotion gate</strong>
+            <span>Promote only when task success, quality, safety, review burden, latency, and cost clear the bar.</span>
+          </div>
+          <div class="mini-row accent-blue">
+            <strong>Learning loop</strong>
+            <span>Rejected diffs, incidents, drift, and painful reviews become new eval cases or stack improvements.</span>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Source transformed from the shared ChatGPT conversation "MLOps and LLMops Practices"; visualization and manuscript prepared as a story-led oral presentation.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const steps = [
+      {
+        tab: "Opening",
+        act: "Act 1: The problem",
+        title: "We are still evaluating AI coding by vibes.",
+        thesis: "The first tension is familiar: a new model or tool feels better, but we cannot prove whether it actually improves engineering work.",
+        points: [
+          "Two AI runs can look impressive and still differ on correctness, rework, security, and cost.",
+          "Asking whether one model is better is too narrow.",
+          "The real question is whether AI-assisted development creates trustworthy delivery capability."
+        ],
+        move: "Open with a concrete bug-fix story. Let the audience feel the risk of choosing tools from anecdotes.",
+        focus: 0
+      },
+      {
+        tab: "Value",
+        act: "Act 2: Principle 1",
+        title: "Create measurable engineering value.",
+        thesis: "AI-assisted development should improve delivery outcomes and developer work, not merely increase AI usage.",
+        points: [
+          "Define value in engineering terms: task success, review burden, regression rate, developer rework, and cost per useful task.",
+          "Keep human feedback and accountability in the loop because developers and reviewers remain responsible for production impact.",
+          "This principle absorbs outcome-led engineering plus human feedback and accountability."
+        ],
+        move: "Start the four-principle path here: value is the reason the system exists.",
+        focus: 0
+      },
+      {
+        tab: "System",
+        act: "Act 3: Principle 2",
+        title: "Treat the AI coding setup as a reproducible engineering system.",
+        thesis: "The unit under management is the whole AI coding stack: model, prompts, skills, tools, repo context, environment, guardrails, and evaluation suite.",
+        points: [
+          "Manage the whole system, not just the model.",
+          "A run should be traceable to stack ID, repo SHA, task, tool calls, files changed, tests, reviewer outcome, and approval policy.",
+          "This principle absorbs whole-system management plus reproducibility and lineage."
+        ],
+        move: "Point to the deployment unit translation and name the stack ingredients slowly.",
+        focus: 1
+      },
+      {
+        tab: "Evidence",
+        act: "Act 4: Principle 3",
+        title: "Change the setup through evidence, not preference.",
+        thesis: "Models, prompts, skills, agents, and tools should become defaults only after controlled comparison on real work.",
+        points: [
+          "Experiment against a stable task suite, then evaluate before promotion.",
+          "Use registry, promotion, rollback, and telemetry so defaults can change without losing control.",
+          "The evidence is mixed across studies, which is exactly why local evaluation matters."
+        ],
+        move: "Trace the six-step loop from baseline to learning, then point to the evidence cards.",
+        focus: 2
+      },
+      {
+        tab: "Adapt",
+        act: "Act 5: Principle 4",
+        title: "Continuously adapt while staying safe and governed.",
+        thesis: "The coding stack will drift as repositories, tools, models, and tasks change, so the practice must learn continuously without weakening safety.",
+        points: [
+          "Detect drift in repository structure, task mix, model behavior, tools, and coding conventions.",
+          "Turn failed runs, rejected diffs, incidents, and painful reviews into evaluation cases or stack improvements.",
+          "Govern source exposure, MCP access, shell commands, secrets, branch rules, approvals, and incident response."
+        ],
+        move: "Shift tone from productivity to responsibility: adaptation only works when trust stays intact.",
+        focus: 3
+      },
+      {
+        tab: "Close",
+        act: "Act 6: The takeaway",
+        title: "The whole story is a four-step operating logic.",
+        thesis: "Value -> reproducible system -> evidence-based change -> continuous safe improvement.",
+        points: [
+          "Treat AI-assisted development as an engineering capability rather than a collection of tools.",
+          "The first practical artifact is a stack manifest.",
+          "The first practical rule is evidence before changing the default."
+        ],
+        move: "End with the compact formula and a clear first step: build the task suite and baseline the current stack.",
+        focus: 2
+      }
+    ];
+
+    const capabilities = [
+      {
+        title: "1. Create measurable engineering value",
+        caption: "Outcome-led + accountable.",
+        detail: "Outcome-led engineering plus human feedback and accountability.",
+        step: 1
+      },
+      {
+        title: "2. Treat it as a reproducible system",
+        caption: "Whole stack + lineage.",
+        detail: "Manage the whole system, not just the model; preserve reproducibility and lineage.",
+        step: 2
+      },
+      {
+        title: "3. Change through evidence",
+        caption: "Experiment, evaluate, promote.",
+        detail: "Use experimentation, evaluation, registry, promotion, rollback, observability, and telemetry.",
+        step: 3
+      },
+      {
+        title: "4. Adapt safely and responsibly",
+        caption: "Drift + governance.",
+        detail: "Use drift detection, continuous improvement, governance, security, and trust controls.",
+        step: 4
+      }
+    ];
+
+    const stepTabs = document.getElementById("stepTabs");
+    const mapNodes = document.getElementById("mapNodes");
+    const actLabel = document.getElementById("actLabel");
+    const storyTitle = document.getElementById("storyTitle");
+    const storyThesis = document.getElementById("storyThesis");
+    const talkPoints = document.getElementById("talkPoints");
+    const speakerMove = document.getElementById("speakerMove");
+
+    let currentStep = 0;
+
+    function renderTabs() {
+      stepTabs.innerHTML = "";
+      steps.forEach((step, index) => {
+        const button = document.createElement("button");
+        button.className = "step-tab";
+        button.type = "button";
+        button.setAttribute("aria-pressed", index === currentStep ? "true" : "false");
+        button.innerHTML = `<span class="step-num">${index + 1}</span><span>${step.tab}</span>`;
+        button.addEventListener("click", () => setStep(index));
+        stepTabs.appendChild(button);
+      });
+    }
+
+    function renderNodes() {
+      mapNodes.innerHTML = "";
+      capabilities.forEach((capability, index) => {
+        const button = document.createElement("button");
+        button.className = `map-node node-${index}`;
+        button.type = "button";
+        button.title = capability.detail;
+        button.innerHTML = `<span class="node-title">${capability.title}</span><span class="node-caption">${capability.caption}</span>`;
+        button.addEventListener("click", () => {
+          setStep(capability.step);
+          highlightNode(index);
+        });
+        mapNodes.appendChild(button);
+      });
+    }
+
+    function highlightNode(index) {
+      document.querySelectorAll(".map-node").forEach((node, nodeIndex) => {
+        node.classList.toggle("active", nodeIndex === index);
+      });
+    }
+
+    function setStep(index) {
+      currentStep = index;
+      const step = steps[index];
+      actLabel.textContent = step.act;
+      storyTitle.textContent = step.title;
+      storyThesis.textContent = step.thesis;
+      speakerMove.textContent = step.move;
+      talkPoints.innerHTML = "";
+      step.points.forEach(point => {
+        const li = document.createElement("li");
+        li.textContent = point;
+        talkPoints.appendChild(li);
+      });
+
+      document.querySelectorAll(".step-tab").forEach((tab, tabIndex) => {
+        tab.classList.toggle("active", tabIndex === index);
+        tab.setAttribute("aria-pressed", tabIndex === index ? "true" : "false");
+      });
+      highlightNode(step.focus);
+    }
+
+    renderTabs();
+    renderNodes();
+    setStep(0);
+  </script>
+</body>
+</html>

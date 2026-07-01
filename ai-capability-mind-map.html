@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Capability-First Mind Map for Applied AI</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --ink: #111827;
+      --muted: #5f6b7a;
+      --line: #d8e0eb;
+      --panel: #ffffff;
+      --root: #1f2937;
+      --capability: #007481;
+      --deployment: #b45309;
+      --application: #2563eb;
+      --specialist: #6d28d9;
+      --leaf: #64748b;
+      --highlight: #f59e0b;
+      --radius: 8px;
+      --shadow: 0 16px 34px rgba(15, 23, 42, 0.10);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      min-height: 34px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius);
+      padding: 7px 10px;
+      background: #fff;
+      color: #1f2937;
+      font-size: 13px;
+      font-weight: 760;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+
+    button.active {
+      color: #fff;
+      border-color: #1f2937;
+      background: #1f2937;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 260px minmax(640px, 1fr) 330px;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 2.5vw, 36px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 980px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 230px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 820;
+      white-space: nowrap;
+    }
+
+    .sidebar,
+    .detail {
+      min-height: 0;
+      overflow: auto;
+      background: #fff;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+    }
+
+    .detail {
+      border-left: 1px solid var(--line);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel + .panel {
+      border-top: 1px solid var(--line);
+    }
+
+    .label {
+      margin: 0 0 10px;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .search {
+      width: 100%;
+      height: 42px;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius);
+      padding: 0 12px;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .legend {
+      display: grid;
+      gap: 8px;
+      color: #334155;
+      font-size: 13px;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 14px 1fr;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--root);
+    }
+
+    .thesis {
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .thesis p {
+      margin: 0 0 10px;
+    }
+
+    .thesis strong {
+      color: #111827;
+    }
+
+    main {
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: #fbfcff;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .toolbar-note {
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+    .map-scroll {
+      min-height: 0;
+      overflow: auto;
+      padding: 20px 22px 46px;
+      background:
+        linear-gradient(#eef2f7 1px, transparent 1px),
+        linear-gradient(90deg, #eef2f7 1px, transparent 1px),
+        #fbfcff;
+      background-size: 28px 28px;
+    }
+
+    .tree {
+      min-width: 720px;
+      max-width: 980px;
+    }
+
+    .tree ul {
+      margin: 0;
+      padding: 0 0 0 24px;
+      list-style: none;
+      border-left: 2px solid #cbd5e1;
+    }
+
+    .tree > ul {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .tree li {
+      position: relative;
+      margin: 0;
+      padding: 5px 0 5px 12px;
+    }
+
+    .tree > ul > li {
+      padding-left: 0;
+    }
+
+    .tree li::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 26px;
+      width: 12px;
+      border-top: 2px solid #cbd5e1;
+    }
+
+    .tree > ul > li::before {
+      display: none;
+    }
+
+    .node-row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) auto;
+      align-items: stretch;
+      gap: 8px;
+      max-width: 650px;
+      border: 1px solid #dbe4ef;
+      border-left-width: 6px;
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.07);
+    }
+
+    .node-row.root {
+      max-width: 500px;
+      border-color: var(--root);
+      background: var(--root);
+      color: #fff;
+    }
+
+    .node-row.selected {
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.12), var(--shadow);
+    }
+
+    .node-row.match {
+      border-color: var(--highlight);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22), var(--shadow);
+    }
+
+    .toggle {
+      min-width: 30px;
+      min-height: 42px;
+      border: 0;
+      border-right: 1px solid #e2e8f0;
+      border-radius: 0;
+      padding: 0;
+      background: transparent;
+      color: #334155;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .root .toggle {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .select-node {
+      min-height: 46px;
+      border: 0;
+      border-radius: 0;
+      padding: 9px 0;
+      background: transparent;
+      text-align: left;
+    }
+
+    .select-node strong {
+      display: block;
+      color: #0f172a;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .root .select-node strong {
+      color: #fff;
+    }
+
+    .select-node span {
+      display: block;
+      margin-top: 3px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .root .select-node span {
+      color: #d1d5db;
+    }
+
+    .badge {
+      align-self: center;
+      margin-right: 10px;
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      color: #334155;
+      background: #eef2f7;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .root .badge {
+      color: #111827;
+      background: #fff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .detail h2 {
+      margin: 0;
+      color: #0f172a;
+      font-size: 23px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 12px;
+    }
+
+    .meta .badge {
+      margin-right: 0;
+    }
+
+    .detail p {
+      margin: 8px 0;
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .detail-section {
+      margin-top: 17px;
+    }
+
+    .detail-section h3 {
+      margin: 0 0 8px;
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 9px 10px;
+      background: #fbfdff;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .outline {
+      margin: 0;
+      padding-left: 18px;
+      color: #334155;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .outline li {
+      margin: 6px 0;
+    }
+
+    .matrix-section {
+      min-width: 920px;
+      max-width: 1120px;
+      margin-top: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .matrix-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .matrix-head h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .matrix-head p {
+      margin: 6px 0 0;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .matrix-body {
+      padding: 0 16px 16px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 9px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    th {
+      color: #334155;
+      background: #fbfdff;
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .router {
+      display: grid;
+      gap: 8px;
+      margin: 14px 16px 16px;
+      color: #334155;
+      font-size: 13px;
+    }
+
+    .route-row {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+
+    .route-row strong {
+      color: #111827;
+    }
+
+    @media (max-width: 1180px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        display: block;
+        height: auto;
+        overflow: visible;
+      }
+
+      .sidebar,
+      .detail {
+        border: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      main {
+        height: 760px;
+      }
+    }
+
+    @media (max-width: 780px) {
+      header,
+      .toolbar {
+        display: block;
+      }
+
+      .pills {
+        justify-content: flex-start;
+        margin-top: 12px;
+      }
+
+      .toolbar-note {
+        margin-top: 8px;
+        text-align: left;
+      }
+
+      .tree {
+        min-width: 680px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>A Capability-First Mind Map for Applied AI</h1>
+        <div class="subtitle">A direct visualization of the PDF's mind map hierarchy, preserving the printed tree structure.</div>
+      </div>
+      <div class="pills">
+        <span class="pill">PDF mind map</span>
+        <span class="pill">Exact hierarchy</span>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="panel">
+        <p class="label">Search</p>
+        <input id="search" class="search" type="search" placeholder="reasoning, 1M, on-device, Klarna">
+      </div>
+      <div class="panel">
+        <p class="label">Controls</p>
+        <div class="chips">
+          <button id="expandAll">Expand all</button>
+          <button id="collapseToBranches">Collapse to branches</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+      <div class="panel">
+        <p class="label">Legend</p>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="panel">
+        <p class="label">PDF thesis</p>
+        <div class="thesis">
+          <p><strong>The clean map is not industries -> use cases.</strong></p>
+          <p>It is <strong>capabilities -> levels -> deployment envelopes -> applications</strong>.</p>
+          <p>This version follows the PDF tree, then adds the new question: which specialist or generalist model should implement each capability?</p>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <section class="toolbar">
+        <div class="chips">
+          <button data-focus="all" class="active">All</button>
+          <button data-focus="capability">Capabilities</button>
+          <button data-focus="deployment">Deployment</button>
+          <button data-focus="application">Applications</button>
+          <button data-focus="specialist">Specialists</button>
+        </div>
+        <div class="toolbar-note">Click a node for detail. Use +/- to expand or collapse the exact PDF branches.</div>
+      </section>
+      <section class="map-scroll">
+        <div class="tree" id="tree"></div>
+        <section class="matrix-section" id="specialistMatrix">
+          <div class="matrix-head">
+            <h2>Generalist baseline vs specialist small models</h2>
+            <p>The added notes make one important distinction: a model can be small because it is a compressed generalist, or small because it is specialized for one narrow capability. This matrix is the clearest way to compare those choices.</p>
+          </div>
+          <div class="matrix-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th>Specialist examples</th>
+                  <th>Capacity signal</th>
+                  <th>Best fit</th>
+                  <th>Versus Claude Sonnet generalist</th>
+                  <th>Access / ease</th>
+                  <th>Resource / latency notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Reasoning / maths</td>
+                  <td>DeepSeek-R1-Distill-Qwen 7B, 14B, 32B</td>
+                  <td>Attachment cites AIME/MATH-500 scores for 14B and 32B distilled reasoning models. Scores are not directly comparable to Sonnet evals.</td>
+                  <td>Bounded local reasoning, offline math-style tasks, predictable benchmarkable problems.</td>
+                  <td>Useful when the task is narrow. Sonnet remains stronger for broad knowledge work, multimodal reasoning, coding agents, and managed tools.</td>
+                  <td>Open-weight derivatives; self-hosting needed.</td>
+                  <td>Open-weight derivatives. 32B-class reasoning often needs workstation/server GPU planning, especially with long contexts.</td>
+                </tr>
+                <tr>
+                  <td>Code generation</td>
+                  <td>Qwen2.5-Coder 0.5B-32B</td>
+                  <td>Attachment cites HumanEval+, MBPP+, BigCodeBench, and code-focused pretraining scale.</td>
+                  <td>Autocomplete, boilerplate, constrained code transforms, simple local review.</td>
+                  <td>Sonnet is better for repository-scale changes, ambiguous requirements, tool loops, tests, and design discussion.</td>
+                  <td>Open-weight family; integration and evaluation are your responsibility.</td>
+                  <td>7B quantized models can be practical on developer workstations; integration is harder than a hosted API.</td>
+                </tr>
+                <tr>
+                  <td>Function calling / structured action</td>
+                  <td>FunctionGemma 270M; xLAM-2 1B / 3B / 8B</td>
+                  <td>Attachment cites BFCL-v3-style scores for xLAM and notes FunctionGemma is purpose-built for local function calling.</td>
+                  <td>Stable API surfaces such as create ticket, check balance, book appointment, or query stock.</td>
+                  <td>Sonnet is preferable when the agent must interpret messy requests, recover from failures, combine tools, or explain itself.</td>
+                  <td>FunctionGemma is lightweight; xLAM licensing should be checked before production.</td>
+                  <td>Very low latency possible locally; task-specific validation and licensing checks still matter.</td>
+                </tr>
+                <tr>
+                  <td>Multimodal edge AI</td>
+                  <td>Gemma 3n E2B / E4B; PaliGemma 3B / 10B / 28B</td>
+                  <td>Attachment cites Gemma 3n memory footprints around 2GB/3GB and mobile multimodal support.</td>
+                  <td>Local OCR, visual inspection, accessibility, camera workflows, offline extraction.</td>
+                  <td>Sonnet is stronger for complex image interpretation, long visual reasoning, and cross-document synthesis.</td>
+                  <td>Open weights / commercial-use terms for Gemma-family options; fine-tuning may be needed.</td>
+                  <td>Gemma 3n is designed for constrained devices; this is the clearest route to privacy and low perceived latency.</td>
+                </tr>
+                <tr>
+                  <td>Long-context document/code processing</td>
+                  <td>Qwen2.5-1M 7B / 14B</td>
+                  <td>Attachment cites Qwen2.5-1M technical claims around faster prefill and long-context evaluation.</td>
+                  <td>Self-hosted long-context reading when control and privacy dominate.</td>
+                  <td>Sonnet also offers long context and managed tools, so the trade is control/privacy versus engineering simplicity.</td>
+                  <td>Open model route, but deployment is not simple at million-token context.</td>
+                  <td>Small weights do not make 1M-token inference cheap; KV cache and prefill dominate memory and latency.</td>
+                </tr>
+                <tr>
+                  <td>Retrieval / semantic memory</td>
+                  <td>EmbeddingGemma 308M</td>
+                  <td>Attachment cites multilingual retrieval, clustering, classification, similarity search, small quantized size, and low EdgeTPU latency.</td>
+                  <td>Retrieval, clustering, classification, similarity search, first-stage memory.</td>
+                  <td>Does not replace Sonnet; it reduces what Sonnet needs to read by retrieving the best evidence first.</td>
+                  <td>Open-weight, easy to run locally compared with a generative LLM.</td>
+                  <td>Very low-cost local layer; often a better architecture move than forcing a general LLM to remember everything.</td>
+                </tr>
+                <tr>
+                  <td>Safety classification</td>
+                  <td>ShieldGemma 2B / 4B / 9B / 27B</td>
+                  <td>Attachment frames ShieldGemma as specialized safety-policy classification across text and images.</td>
+                  <td>Pre- and post-generation policy checks for text/image workflows.</td>
+                  <td>Complements Sonnet as a gate. It should not be expected to answer business questions.</td>
+                  <td>Specialized classifier; must be evaluated against your own policy and risk tolerance.</td>
+                  <td>Low-latency policy layer; needs its own false-positive and false-negative evaluation.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="matrix-head">
+            <h2>Compute and deployment planning matrix</h2>
+            <p>These are planning estimates from the added notes. The 4-bit figures are weight-only lower bounds; runtime overhead and KV cache can dominate real memory needs.</p>
+          </div>
+          <div class="matrix-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model class</th>
+                  <th>Approx. 4-bit weight floor</th>
+                  <th>Practical deployment envelope</th>
+                  <th>Latency profile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>FunctionGemma 270M</td>
+                  <td>~0.14 GB</td>
+                  <td>Mobile, CPU, NPU, edge service</td>
+                  <td>Near-instant local intent-to-tool routing after task-specific tuning.</td>
+                </tr>
+                <tr>
+                  <td>EmbeddingGemma 308M</td>
+                  <td>~0.15 GB</td>
+                  <td>Mobile, laptop, edge</td>
+                  <td>Attachment cites under 22 ms on EdgeTPU.</td>
+                </tr>
+                <tr>
+                  <td>xLAM 1B / 3B</td>
+                  <td>~0.5 / 1.5 GB</td>
+                  <td>Laptop CPU/GPU, edge server</td>
+                  <td>Fast for narrow tool-routing tasks; validation remains your responsibility.</td>
+                </tr>
+                <tr>
+                  <td>Gemma 3n E2B / E4B</td>
+                  <td>Reported ~2 / 3 GB memory footprint</td>
+                  <td>Modern phone, laptop, NPU-capable device</td>
+                  <td>Low-latency multimodal local interaction.</td>
+                </tr>
+                <tr>
+                  <td>Qwen-Coder 7B</td>
+                  <td>~3.5 GB</td>
+                  <td>Developer workstation or larger unified-memory laptop</td>
+                  <td>Suitable for bounded coding tasks.</td>
+                </tr>
+                <tr>
+                  <td>DeepSeek-R1 Distill 14B / 32B</td>
+                  <td>~7 / 16 GB</td>
+                  <td>GPU workstation; 32B often constrained for long context</td>
+                  <td>More reasoning tokens can materially increase total time.</td>
+                </tr>
+                <tr>
+                  <td>Long-context 7B / 14B</td>
+                  <td>Same weights, large extra KV-cache memory</td>
+                  <td>Workstation or server for serious 128k-1M context</td>
+                  <td>Prefill and memory, not just model size, drive latency.</td>
+                </tr>
+                <tr>
+                  <td>Claude Sonnet</td>
+                  <td>Hosted</td>
+                  <td>API only; no infrastructure ownership</td>
+                  <td>Managed serving; measure P50/P95 end-to-end latency in your workflow.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="matrix-head">
+            <h2>Routing policy</h2>
+            <p>The practical design is not "replace Sonnet with many small models." It is a small specialist front layer plus a frontier-generalist exception path.</p>
+          </div>
+          <div class="router">
+            <div class="route-row"><strong>Retrieval needed?</strong><span>Embedding model + vector search, then send only the best evidence to Sonnet if synthesis is needed.</span></div>
+            <div class="route-row"><strong>Simple fixed action?</strong><span>FunctionGemma or xLAM-style router + schema validator.</span></div>
+            <div class="route-row"><strong>Local image/audio task?</strong><span>Gemma 3n or fine-tuned PaliGemma.</span></div>
+            <div class="route-row"><strong>Bounded code transform?</strong><span>Qwen-Coder first; escalate if repo-scale reasoning, tests, or design judgment are required.</span></div>
+            <div class="route-row"><strong>Safety gate?</strong><span>ShieldGemma-style classifier before and after the generalist call.</span></div>
+            <div class="route-row"><strong>Ambiguous or high value?</strong><span>Claude Sonnet with tools, retrieved evidence, audit trail, and human review where needed.</span></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <section class="detail">
+      <div class="panel" id="detail"></div>
+    </section>
+  </div>
+
+  <script>
+    function leaf(id, title, kind, branch, summary, points = []) {
+      return { id, title, kind, branch, summary: summary || title, points };
+    }
+
+    const root = {
+      id: "ai-systems",
+      title: "AI systems",
+      kind: "root",
+      branch: "root",
+      summary: "The PDF's mind map starts with AI systems and splits into three original branches: fundamental capabilities, deployment envelopes, and leaf applications. This version adds a fourth cross-cutting specialist model layer.",
+      points: [
+        "Capabilities -> levels -> deployment envelopes -> applications.",
+        "Applications are downstream of fundamental capabilities.",
+        "Deployment envelope decides where a capability can run, how fast, at what cost, and with what reliability."
+      ],
+      children: [
+        {
+          id: "fundamental-capabilities",
+          title: "Fundamental capabilities",
+          kind: "category",
+          branch: "capability",
+          summary: "The reusable primitives that applications build on: multimodal perception, reasoning, context and working memory, tool use and action, and grounding and control.",
+          points: ["Each capability has levels.", "Real systems usually combine multiple capabilities."],
+          children: [
+            {
+              id: "multimodal-perception",
+              title: "Multimodal perception",
+              kind: "capability",
+              branch: "capability",
+              summary: "Cross-modal representation: understanding and combining text, images, audio, video, and sometimes live environment signals.",
+              points: ["Best for accessibility, search, monitoring, and live assistance."],
+              children: [
+                leaf("text-only", "Text only", "level", "capability"),
+                leaf("text-image", "Text + image", "level", "capability"),
+                leaf("text-image-audio-video", "Text + image + audio + video", "level", "capability"),
+                leaf("realtime-multimodal", "Real-time multimodal interaction", "level", "capability"),
+                leaf("multimodal-best", "Best for accessibility, search, monitoring, live assistance", "best for", "capability")
+              ]
+            },
+            {
+              id: "reasoning",
+              title: "Reasoning",
+              kind: "capability",
+              branch: "capability",
+              summary: "The capacity to perform multi-step transformation before answering. In current products this appears as reasoning effort, thinking, or test-time compute.",
+              points: ["Best for coding, research, workflow execution, and planning."],
+              children: [
+                leaf("direct-response", "Direct response", "level", "capability"),
+                leaf("prompted-step-by-step", "Prompted step-by-step reasoning", "level", "capability"),
+                leaf("native-reasoning", "Native reasoning / test-time compute", "level", "capability"),
+                leaf("interleaved-reasoning", "Interleaved reasoning + acting + tool use", "level", "capability"),
+                leaf("reasoning-best", "Best for coding, research, workflow execution, planning", "best for", "capability")
+              ]
+            },
+            {
+              id: "context-working-memory",
+              title: "Context and working memory",
+              kind: "capability",
+              branch: "capability",
+              summary: "The model's short-term working memory. The PDF uses the rough intuition that one English token is about four characters.",
+              points: ["Window size is not the same as usable memory.", "Grounding still matters for freshness, provenance, and access control."],
+              children: [
+                leaf("context-8k-32k", "8k-32k tokens ~= tens of KB of text", "level", "capability"),
+                leaf("context-128k-400k", "128k-400k ~= roughly 0.5-1.6 MB", "level", "capability"),
+                leaf("context-1m", "1M+ ~= roughly 4 MB", "level", "capability"),
+                leaf("context-best", "Best for codebases, many papers, long transcripts, large document sets", "best for", "capability")
+              ]
+            },
+            {
+              id: "tool-use-action",
+              title: "Tool use and action",
+              kind: "capability",
+              branch: "capability",
+              summary: "The bridge from model as generator to model as actor.",
+              points: ["Each step upward adds value and operational complexity.", "Best for automation, search-grounded answers, and operational workflows."],
+              children: [
+                leaf("structured-output", "Structured output", "level", "capability"),
+                leaf("function-calling", "Function calling", "level", "capability"),
+                leaf("multi-tool", "Multi-tool orchestration", "level", "capability"),
+                leaf("computer-use", "Computer use / browser / code execution", "level", "capability"),
+                leaf("tool-best", "Best for automation, search-grounded answers, operational workflows", "best for", "capability")
+              ]
+            },
+            {
+              id: "grounding-control",
+              title: "Grounding and control",
+              kind: "capability",
+              branch: "capability",
+              summary: "The production capability to stay grounded in fresh or enterprise-specific information and return controllable outputs.",
+              points: ["RAG versus long context is the wrong argument.", "Context helps hold information; grounding helps decide what information should be there."],
+              children: [
+                leaf("rag", "RAG / enterprise retrieval", "level", "capability"),
+                leaf("web-search-grounding", "Web search grounding", "level", "capability"),
+                leaf("context-caching", "Context caching / compaction", "level", "capability"),
+                leaf("evals-guardrails", "Evals / guardrails / adapters", "level", "capability")
+              ]
+            }
+          ]
+        },
+        {
+          id: "deployment-envelopes",
+          title: "Deployment envelopes",
+          kind: "category",
+          branch: "deployment",
+          summary: "The hardware and operating envelopes implied by model scale and capability depth.",
+          points: ["This branch answers where inference runs, how fast it is, how much it costs, and how reliable it is under load."],
+          children: [
+            {
+              id: "mobile-on-device",
+              title: "Mobile / on-device",
+              kind: "deployment",
+              branch: "deployment",
+              summary: "The priority is privacy, low friction, offline use, and low marginal cost per request.",
+              points: ["Good for summarization, extraction, classification, lightweight assistants, and accessibility features."],
+              children: [
+                leaf("mobile-scale", "Typical scale: ~2B-4B effective, or Apple's 3B device-scale model", "detail", "deployment"),
+                leaf("mobile-hardware", "Hardware: phone NPU / consumer laptop NPU", "detail", "deployment"),
+                leaf("mobile-strengths", "Strengths: privacy, offline use, zero marginal API cost", "detail", "deployment"),
+                leaf("mobile-limits", "Limits: weaker world knowledge and advanced reasoning", "detail", "deployment")
+              ]
+            },
+            {
+              id: "workstation-self-hosted",
+              title: "Workstation / self-hosted",
+              kind: "deployment",
+              branch: "deployment",
+              summary: "The middle tier for control, customization, and local data handling when absolute frontier capability is not required.",
+              points: ["Often suitable for internal tools, bespoke OCR-plus-reasoning pipelines, and regulated workloads."],
+              children: [
+                leaf("workstation-scale", "Typical scale: 8B-70B open weights", "detail", "deployment"),
+                leaf("workstation-hardware", "Hardware: 24GB to 48GB GPU, sometimes multi-GPU", "detail", "deployment"),
+                leaf("workstation-strengths", "Strengths: control, customization, local data handling", "detail", "deployment"),
+                leaf("workstation-limits", "Limits: setup complexity, lower absolute frontier capability", "detail", "deployment")
+              ]
+            },
+            {
+              id: "cloud-frontier",
+              title: "Cloud frontier",
+              kind: "deployment",
+              branch: "deployment",
+              summary: "The high-capability tier for very long context, advanced reasoning, built-in tools, and managed serving.",
+              points: ["Best for hard cases that need long context, complex planning, computer use, or top-end reliability."],
+              children: [
+                leaf("cloud-scale", "Typical scale: proprietary frontier models", "detail", "deployment"),
+                leaf("cloud-hardware", "Hardware: managed multi-GPU / rack-scale inference", "detail", "deployment"),
+                leaf("cloud-strengths", "Strengths: 400k-1M+ context, best reasoning, built-in tools", "detail", "deployment"),
+                leaf("cloud-limits", "Limits: usage cost, latency variance, external dependency", "detail", "deployment")
+              ]
+            }
+          ]
+        },
+        {
+          id: "leaf-applications",
+          title: "Leaf applications",
+          kind: "category",
+          branch: "application",
+          summary: "The actual use cases sit at the leaves after capabilities and deployment envelopes are understood.",
+          points: ["The PDF lists these as leaf nodes, not starting points."],
+          children: [
+            leaf("multimodal-accessibility", "Multimodal accessibility assistant", "application", "application", "Example pattern: Be My Eyes; multimodal perception plus a clear user need."),
+            leaf("enterprise-document-copilot", "Enterprise document copilot", "application", "application", "Example pattern: Morgan Stanley; grounding, enterprise retrieval, evaluation, and trust controls."),
+            leaf("customer-service-agent", "Customer-service automation agent", "application", "application", "Example pattern: Klarna; function calling, multilingual reasoning, and workflow integration."),
+            leaf("agentic-coding", "Agentic coding and code review", "application", "application", "Example pattern: GitHub Copilot; reasoning plus repository context, tools, tests, and review loops."),
+            leaf("search-grounded-engine", "Search-grounded AI answer engine", "application", "application", "Example pattern: Google AI Overviews and AI Mode; grounding plus long context plus query fan-out.")
+          ]
+        },
+        {
+          id: "specialist-model-layer",
+          title: "Specialist model layer",
+          kind: "category",
+          branch: "specialist",
+          summary: "The added material asks when to use a small specialist model instead of a generalist LLM such as Claude Sonnet. The key distinction is small generalist versus narrow specialist.",
+          points: [
+            "Use specialists when the task is predictable, bounded, high-volume, privacy-sensitive, or latency-critical.",
+            "Use Sonnet when the task is ambiguous, cross-domain, multi-step, multimodal, failure-prone, or explanation-heavy.",
+            "Measure cost per successful task, not token cost alone."
+          ],
+          children: [
+            leaf("generalist-baseline", "Claude Sonnet as generalist baseline", "baseline", "specialist", "A strong hosted generalist with vision, tools, adaptive reasoning, and long-context support. It is the escalation path for ambiguous or high-value work.", [
+              "Easy to use through API.",
+              "No infrastructure ownership.",
+              "Best when requirements shift or tool/reasoning loops are complex."
+            ]),
+            {
+              id: "small-generalist-vs-specialist",
+              title: "Small generalist vs specialist",
+              kind: "distinction",
+              branch: "specialist",
+              summary: "A model can be small because it is a compressed generalist, or because it is optimized for a narrow job such as tool routing, embeddings, coding, vision, or safety.",
+              points: [
+                "Small generalist: broad but compressed, such as mobile-first Gemma-style models.",
+                "Specialist: narrow capability, lower resource need, shorter latency, easier evaluation.",
+                "Specialists fail when the task unexpectedly changes domain or requires broad reasoning."
+              ],
+              children: [
+                leaf("specialist-rule", "Specialist wins on bounded, measurable, repeated tasks", "rule", "specialist"),
+                leaf("generalist-rule", "Generalist wins on ambiguous, multi-step, cross-domain tasks", "rule", "specialist")
+              ]
+            },
+            leaf("reasoning-specialists", "Reasoning / maths specialists", "specialist", "specialist", "Examples: DeepSeek-R1-Distill-Qwen 7B, 14B, 32B. Good for bounded local reasoning, less suitable as broad frontier agents."),
+            leaf("code-specialists", "Code generation specialists", "specialist", "specialist", "Examples: Qwen2.5-Coder family. Good for autocomplete, boilerplate, constrained transforms, and simple local code review."),
+            leaf("function-specialists", "Function calling specialists", "specialist", "specialist", "Examples: FunctionGemma 270M and xLAM-2. Good for stable API surfaces and low-latency tool routing."),
+            leaf("multimodal-edge-specialists", "Multimodal edge specialists", "specialist", "specialist", "Examples: Gemma 3n and PaliGemma. Good for local OCR, visual inspection, accessibility, and offline extraction."),
+            leaf("long-context-specialists", "Long-context specialists", "specialist", "specialist", "Examples: Qwen2.5-1M variants. Useful for self-hosted long-context readers, but KV cache and prefill can dominate resource use."),
+            leaf("embedding-specialists", "Retrieval / semantic memory specialists", "specialist", "specialist", "Example: EmbeddingGemma 308M. Does not replace Sonnet; it retrieves the best passages before synthesis."),
+            leaf("safety-specialists", "Safety classification specialists", "specialist", "specialist", "Example: ShieldGemma. Complements a generalist as a pre/post policy gate and needs false-positive/false-negative evaluation."),
+            leaf("routing-policy", "Specialists first, Sonnet as escalation", "architecture", "specialist", "Start with the cheap specialist when success criteria are narrow and measurable. Escalate when confidence is low, tool calls fail, the task crosses domains, or explanation quality matters.")
+          ]
+        }
+      ]
+    };
+
+    const colors = {
+      root: "#1f2937",
+      capability: "#007481",
+      deployment: "#b45309",
+      application: "#2563eb",
+      specialist: "#6d28d9"
+    };
+
+    const state = {
+      selectedId: "ai-systems",
+      query: "",
+      focus: "all",
+      collapsed: new Set()
+    };
+
+    const byId = new Map();
+    const parentById = new Map();
+    const allNodes = [];
+
+    function index(node, parent = null) {
+      byId.set(node.id, node);
+      allNodes.push(node);
+      if (parent) parentById.set(node.id, parent.id);
+      (node.children || []).forEach(child => index(child, node));
+    }
+
+    index(root);
+
+    function textFor(node) {
+      return [node.title, node.kind, node.branch, node.summary, ...(node.points || [])].join(" ").toLowerCase();
+    }
+
+    function ancestors(id) {
+      const result = [];
+      let cursor = parentById.get(id);
+      while (cursor) {
+        result.push(cursor);
+        cursor = parentById.get(cursor);
+      }
+      return result;
+    }
+
+    function descendants(node, result = []) {
+      (node.children || []).forEach(child => {
+        result.push(child.id);
+        descendants(child, result);
+      });
+      return result;
+    }
+
+    function buildVisibleSet() {
+      const visible = new Set();
+      const q = state.query.trim().toLowerCase();
+      const focus = state.focus;
+      const focusIds = new Set();
+
+      allNodes.forEach(node => {
+        const focusMatch = focus === "all" || node.branch === focus || node.kind === "root";
+        const queryMatch = !q || textFor(node).includes(q);
+        if (focusMatch && queryMatch) {
+          focusIds.add(node.id);
+          ancestors(node.id).forEach(id => focusIds.add(id));
+          if (!q && (focus === "all" || node.kind !== "root")) descendants(node).forEach(id => focusIds.add(id));
+        }
+      });
+
+      if (!q && focus !== "all") {
+        allNodes.forEach(node => {
+          if (node.branch === focus) {
+            focusIds.add(node.id);
+            ancestors(node.id).forEach(id => focusIds.add(id));
+          }
+        });
+      }
+
+      if (q) {
+        allNodes.forEach(node => {
+          if (textFor(node).includes(q) && (focus === "all" || node.branch === focus || ancestors(node.id).some(id => byId.get(id).branch === focus))) {
+            focusIds.add(node.id);
+            ancestors(node.id).forEach(id => focusIds.add(id));
+          }
+        });
+      }
+
+      focusIds.forEach(id => visible.add(id));
+      visible.add("ai-systems");
+      return visible;
+    }
+
+    function isMatch(node) {
+      const q = state.query.trim().toLowerCase();
+      return q && textFor(node).includes(q);
+    }
+
+    function renderTree() {
+      const visible = buildVisibleSet();
+      document.getElementById("tree").innerHTML = `<ul>${renderNode(root, visible)}</ul>`;
+      document.querySelectorAll("[data-select]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.selectedId = button.dataset.select;
+          render();
+          document.querySelector(`[data-node-id="${state.selectedId}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" });
+        });
+      });
+      document.querySelectorAll("[data-toggle]").forEach(button => {
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          const id = button.dataset.toggle;
+          if (state.collapsed.has(id)) state.collapsed.delete(id);
+          else state.collapsed.add(id);
+          render();
+        });
+      });
+    }
+
+    function renderNode(node, visible) {
+      if (!visible.has(node.id)) return "";
+      const hasChildren = node.children?.some(child => visible.has(child.id));
+      const collapsed = state.collapsed.has(node.id);
+      const selected = state.selectedId === node.id;
+      const match = isMatch(node);
+      const branchColor = colors[node.branch] || colors.root;
+      const childHtml = hasChildren && !collapsed
+        ? `<ul>${node.children.map(child => renderNode(child, visible)).join("")}</ul>`
+        : "";
+      return `
+        <li data-node-id="${node.id}">
+          <div class="node-row ${node.kind === "root" ? "root" : ""} ${selected ? "selected" : ""} ${match ? "match" : ""}" style="border-left-color:${branchColor}">
+            <button class="toggle" data-toggle="${node.id}" aria-label="${collapsed ? "Expand" : "Collapse"} ${node.title}">${hasChildren ? (collapsed ? "+" : "-") : ""}</button>
+            <button class="select-node" data-select="${node.id}">
+              <strong>${node.title}</strong>
+              <span>${node.summary}</span>
+            </button>
+            <span class="badge">${node.kind}</span>
+          </div>
+          ${childHtml}
+        </li>
+      `;
+    }
+
+    function renderDetail() {
+      const node = byId.get(state.selectedId) || root;
+      const parent = parentById.get(node.id) ? byId.get(parentById.get(node.id)) : null;
+      const points = node.points?.length ? `
+        <div class="detail-section">
+          <h3>Map notes</h3>
+          <ul class="list">${node.points.map(item => `<li>${item}</li>`).join("")}</ul>
+        </div>
+      ` : "";
+      const childOutline = node.children?.length ? `
+        <div class="detail-section">
+          <h3>Direct children</h3>
+          <ol class="outline">${node.children.map(child => `<li>${child.title}</li>`).join("")}</ol>
+        </div>
+      ` : "";
+      document.getElementById("detail").innerHTML = `
+        <h2>${node.title}</h2>
+        <div class="meta">
+          <span class="badge">${node.kind}</span>
+          <span class="badge">${node.branch}</span>
+          ${parent ? `<span class="badge">${parent.title}</span>` : ""}
+        </div>
+        <p>${node.summary}</p>
+        ${points}
+        ${childOutline}
+      `;
+    }
+
+    function renderLegend() {
+      const rows = [
+        ["root", "Root"],
+        ["capability", "Fundamental capabilities"],
+        ["deployment", "Deployment envelopes"],
+        ["application", "Leaf applications"],
+        ["specialist", "Specialist model layer"]
+      ];
+      document.getElementById("legend").innerHTML = rows.map(([key, label]) => (
+        `<div class="legend-row"><span class="dot" style="background:${colors[key]}"></span><span>${label}</span></div>`
+      )).join("");
+    }
+
+    function renderFocusButtons() {
+      document.querySelectorAll("[data-focus]").forEach(button => {
+        button.classList.toggle("active", state.focus === button.dataset.focus);
+      });
+    }
+
+    function render() {
+      renderFocusButtons();
+      renderLegend();
+      renderTree();
+      renderDetail();
+    }
+
+    document.getElementById("search").addEventListener("input", event => {
+      state.query = event.target.value;
+      if (state.query.trim()) state.collapsed.clear();
+      render();
+    });
+
+    document.querySelectorAll("[data-focus]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.focus = button.dataset.focus;
+        state.selectedId = "ai-systems";
+        state.collapsed.clear();
+        render();
+      });
+    });
+
+    document.getElementById("expandAll").addEventListener("click", () => {
+      state.collapsed.clear();
+      render();
+    });
+
+    document.getElementById("collapseToBranches").addEventListener("click", () => {
+      state.collapsed.clear();
+      allNodes.forEach(node => {
+        if (node.kind === "capability" || node.kind === "deployment" || node.kind === "distinction") state.collapsed.add(node.id);
+      });
+      render();
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      state.selectedId = "ai-systems";
+      state.query = "";
+      state.focus = "all";
+      state.collapsed.clear();
+      document.getElementById("search").value = "";
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
