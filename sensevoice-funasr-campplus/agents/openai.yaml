@@ -1,0 +1,4 @@
+interface:
+  display_name: "SenseVoice FunASR CAM++"
+  short_description: "CPU SenseVoice with CAM++ labels."
+  default_prompt: "Use -funasr-campplus to set up a CPU SenseVoice/FunASR/CAM++ environment and transcribe local audio."
