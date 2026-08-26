@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How unified domain knowledge works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --paper: #f5f5f5;
+      --ink: #2d3142;
+      --muted: #4f5d75;
+      --soft: #7a8399;
+      --accent: #eb6c36;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      min-height: 100vh;
+      padding: 48px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+    }
+    .frame { width: 100%; max-width: 1280px; }
+    .eyebrow {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .canvas { overflow-x: auto; }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <p class="eyebrow">Architecture · Netting domain knowledge</p>
+    <h1>How unified domain knowledge works</h1>
+    <p class="subtitle">Independent sources keep their detail; a standard knowledge source interface makes their evidence linkable, governable, and useful together.</p>
+
+    <div class="canvas">
+      <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-labelledby="unified-domain-knowledge-title unified-domain-knowledge-desc">
+        <title id="unified-domain-knowledge-title">How unified domain knowledge works</title>
+        <desc id="unified-domain-knowledge-desc">Architecture diagram showing independent code, document, and future knowledge sources normalized through a standard knowledge source interface, linked in a Netting Domain Knowledge Graph, governed by human decisions, and used for inspection, behavior-gap analysis, and approval packs.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/>
+          </marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/>
+          </marker>
+          <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+          </marker>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones -->
+        <rect x="40" y="72" width="240" height="456" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <rect x="104" y="76" width="112" height="16" rx="4" fill="#f5f5f5"/>
+        <text x="160" y="88" fill="rgba(45,49,66,0.48)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">INDEPENDENT SOURCES</text>
+
+        <rect x="320" y="72" width="640" height="456" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <rect x="540" y="76" width="200" height="16" rx="4" fill="#f5f5f5"/>
+        <text x="640" y="88" fill="rgba(45,49,66,0.48)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">DOMAIN KNOWLEDGE LAYER</text>
+
+        <rect x="1000" y="72" width="240" height="456" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <rect x="1072" y="76" width="96" height="16" rx="4" fill="#f5f5f5"/>
+        <text x="1120" y="88" fill="rgba(45,49,66,0.48)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">USE &amp; REVIEW</text>
+
+        <!-- Connectors: source providers to contract adapters -->
+        <path d="M 256,160 H 288 Q 296,160 296,168 V 240 Q 296,248 304,248 H 344"
+              fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="256" y1="272" x2="344" y2="272" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 256,384 H 304 Q 312,384 312,376 V 304 Q 312,296 320,296 H 344"
+              fill="none" stroke="rgba(79,93,117,0.64)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+        <!-- Source interface to DKG and Linker -->
+        <line x1="520" y1="272" x2="600" y2="272" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <path d="M 480,224 V 140 Q 480,132 488,132 H 600"
+              fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="700" y1="168" x2="700" y2="208" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+        <!-- Governance projection and consumer flow -->
+        <line x1="700" y1="376" x2="700" y2="336" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="800" y1="272" x2="1024" y2="272" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <path d="M 1024,432 H 968 Q 960,432 960,424 V 412 H 800"
+              fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+        <!-- Arrow labels: masks remain clear of connectors and nodes -->
+        <rect x="264" y="136" width="56" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="292" y="144" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">EVIDENCE</text>
+
+        <rect x="264" y="248" width="56" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="292" y="256" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">EVIDENCE</text>
+
+        <rect x="268" y="360" width="64" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="300" y="368" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">PLUG-IN</text>
+
+        <rect x="532" y="248" width="56" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="560" y="256" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ANCHORS</text>
+
+        <rect x="492" y="108" width="80" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="532" y="116" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CANDIDATES</text>
+
+        <rect x="712" y="180" width="72" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="748" y="188" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LINKS</text>
+
+        <rect x="712" y="348" width="80" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="752" y="356" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">DECISIONS</text>
+
+        <rect x="864" y="248" width="72" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="900" y="256" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CONTEXT</text>
+
+        <rect x="860" y="388" width="88" height="12" rx="4" fill="#f5f5f5"/>
+        <text x="904" y="396" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HUMAN REVIEW</text>
+
+        <!-- Source nodes -->
+        <rect x="64" y="124" width="192" height="72" rx="8" fill="#f5f5f5"/>
+        <rect x="64" y="124" width="192" height="72" rx="8" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+        <rect x="76" y="136" width="40" height="16" rx="4" fill="transparent" stroke="rgba(122,131,153,0.48)" stroke-width="0.8"/>
+        <text x="96" y="148" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">CODE</text>
+        <text x="160" y="164" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Java 17 code</text>
+        <text x="160" y="184" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">symbols · calls · source spans</text>
+
+        <rect x="64" y="236" width="192" height="72" rx="8" fill="#f5f5f5"/>
+        <rect x="64" y="236" width="192" height="72" rx="8" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+        <rect x="76" y="248" width="40" height="16" rx="4" fill="transparent" stroke="rgba(122,131,153,0.48)" stroke-width="0.8"/>
+        <text x="96" y="260" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">DOC</text>
+        <text x="160" y="276" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Confluence pages</text>
+        <text x="160" y="296" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">versions · claims · source spans</text>
+
+        <rect x="64" y="348" width="192" height="72" rx="8" fill="#f5f5f5"/>
+        <rect x="64" y="348" width="192" height="72" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.24)" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="76" y="360" width="56" height="16" rx="4" fill="transparent" stroke="rgba(45,49,66,0.24)" stroke-width="0.8"/>
+        <text x="104" y="372" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">FUTURE</text>
+        <text x="160" y="388" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Other providers</text>
+        <text x="160" y="408" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">tests · ADO · workflow · runtime</text>
+
+        <!-- Domain knowledge layer nodes -->
+        <rect x="344" y="224" width="176" height="96" rx="8" fill="#f5f5f5"/>
+        <rect x="344" y="224" width="176" height="96" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="356" y="236" width="72" height="16" rx="4" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="392" y="248" fill="#2d3142" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">INTERFACE</text>
+        <text x="432" y="276" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Source adapters</text>
+        <text x="432" y="296" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">stable IDs · versions · evidence</text>
+
+        <rect x="600" y="96" width="200" height="72" rx="8" fill="#f5f5f5"/>
+        <rect x="600" y="96" width="200" height="72" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="612" y="108" width="48" height="16" rx="4" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="636" y="120" fill="#2d3142" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">LINK</text>
+        <text x="700" y="136" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Knowledge Linker</text>
+        <text x="700" y="156" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">deterministic first · ambiguity kept</text>
+
+        <rect x="600" y="208" width="200" height="128" rx="8" fill="#f5f5f5"/>
+        <rect x="600" y="208" width="200" height="128" rx="8" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1.2"/>
+        <rect x="612" y="220" width="40" height="16" rx="4" fill="transparent" stroke="rgba(235,108,54,0.56)" stroke-width="0.8"/>
+        <text x="632" y="232" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">DKG</text>
+        <text x="700" y="260" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Domain Knowledge Graph</text>
+        <text x="700" y="284" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">canonical entities + cross-source edges</text>
+        <text x="700" y="304" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">provenance · validity · status</text>
+
+        <rect x="600" y="376" width="200" height="72" rx="8" fill="#f5f5f5"/>
+        <rect x="600" y="376" width="200" height="72" rx="8" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+        <rect x="612" y="388" width="40" height="16" rx="4" fill="transparent" stroke="rgba(79,93,117,0.48)" stroke-width="0.8"/>
+        <text x="632" y="400" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">GOV</text>
+        <text x="700" y="416" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Knowledge Governance</text>
+        <text x="700" y="436" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">human decision · immutable history</text>
+
+        <!-- Outcome node -->
+        <rect x="1024" y="128" width="192" height="352" rx="8" fill="#f5f5f5"/>
+        <rect x="1024" y="128" width="192" height="352" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="1036" y="140" width="56" height="16" rx="4" fill="transparent" stroke="rgba(45,49,66,0.40)" stroke-width="0.8"/>
+        <text x="1064" y="152" fill="#2d3142" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">OUTPUT</text>
+        <text x="1120" y="184" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Use approved knowledge</text>
+
+        <line x1="1048" y1="208" x2="1192" y2="208" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <text x="1052" y="232" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Inspect</text>
+        <text x="1052" y="252" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">code · document · linked</text>
+
+        <line x1="1048" y1="272" x2="1192" y2="272" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <text x="1052" y="296" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Analyze</text>
+        <text x="1052" y="316" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">behavior gaps · partial results</text>
+
+        <line x1="1048" y1="336" x2="1192" y2="336" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <text x="1052" y="360" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Generate candidate tests</text>
+        <text x="1052" y="380" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">future · draft BDD / test cases</text>
+
+        <line x1="1048" y1="400" x2="1192" y2="400" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <text x="1052" y="424" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Review &amp; export</text>
+        <text x="1052" y="444" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">QA decision · approval pack</text>
+
+        <!-- Editorial rule -->
+        <text x="640" y="564" fill="#2d3142" font-size="16" font-family="'Instrument Serif', serif" font-style="italic" text-anchor="middle">Approved knowledge may generate draft tests; people decide what becomes real.</text>
+
+        <!-- Legend strip -->
+        <line x1="40" y1="620" x2="1240" y2="620" stroke="rgba(45,49,66,0.12)" stroke-width="0.8"/>
+        <text x="40" y="644" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+
+        <rect x="128" y="636" width="16" height="12" rx="4" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+        <text x="152" y="648" fill="#4f5d75" font-size="8" font-family="'Geist', sans-serif">Independent source</text>
+
+        <rect x="292" y="636" width="16" height="12" rx="4" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="316" y="648" fill="#4f5d75" font-size="8" font-family="'Geist', sans-serif">Contract-bound component</text>
+
+        <rect x="504" y="636" width="16" height="12" rx="4" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+        <text x="528" y="648" fill="#4f5d75" font-size="8" font-family="'Geist', sans-serif">Unified graph focal point</text>
+
+        <line x1="704" y1="644" x2="740" y2="644" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="752" y="648" fill="#4f5d75" font-size="8" font-family="'Geist', sans-serif">Optional or human feedback</text>
+
+        <line x1="948" y1="644" x2="984" y2="644" stroke="#eb6c36" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <text x="996" y="648" fill="#4f5d75" font-size="8" font-family="'Geist', sans-serif">Primary knowledge flow</text>
+      </svg>
+    </div>
+  </main>
+</body>
+</html>
